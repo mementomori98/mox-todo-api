@@ -46,6 +46,10 @@ abstract class InMemoryRepository<TKey: Any, TEntity: Entity<TKey>>(val keyProvi
         entities.removeIf { it.key == key }
     }
 
+    override fun deleteAll(filter: (TEntity) -> Boolean) {
+        entities.removeIf(filter)
+    }
+
     protected open fun validate(model: TEntity) {
         if (!model.valid)
             throw IllegalStateException("Model is not valid")

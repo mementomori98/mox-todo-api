@@ -7,7 +7,7 @@ import java.lang.IllegalArgumentException
 
 @Component
 final class TodoListRepositoryImpl : TodoListRepository, InMemoryRepository<Int, TodoList>(
-    { key -> if (key == null) 0 else key + 1 }
+    { key -> if (key == null) 1 else key + 1 }
 ) {
 
     init {

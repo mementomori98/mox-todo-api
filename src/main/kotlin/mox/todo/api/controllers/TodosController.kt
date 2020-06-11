@@ -25,5 +25,9 @@ class TodosController(
     fun getAll(@RequestParam(name = "listName") list: String?): List<TodoApiModel> = todoRepository
         .all().map { todo ->
             TodoApiModel(todo, listRepository.singleOrNull(todo.listId ?: -1))
-        }.filter { if (list == null) true else it.list == list}
+        }.filter { if (list == null) true else it.list == list }
+
+    @DeleteMapping
+    @RequestMapping("/{key}")
+    fun delete(@PathVariable("key") key: Int) = todoRepository.delete(key)
 }

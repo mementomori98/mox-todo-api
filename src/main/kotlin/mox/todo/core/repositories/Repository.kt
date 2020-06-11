@@ -11,5 +11,6 @@ interface Repository<TKey, TEntity> {
     fun all(filter: (TEntity) -> Boolean): List<TEntity>
     fun update(model: TEntity): TEntity
     fun delete(key: TKey)
+    fun deleteAll(filter: (TEntity) -> Boolean)
 
 }
