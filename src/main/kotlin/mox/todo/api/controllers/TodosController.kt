@@ -14,10 +14,12 @@ class TodosController(
 
     @PostMapping
     fun add(@RequestBody todo: TodoApiModel): TodoApiModel {
+        val model = todo.makeModel(listKeyFinder = {
+            listName -> if (listName == "" || listName == null) null else listRepository.single(listName).key
+        })
         return TodoApiModel(
-            todoRepository.add(
-                todo.makeModel(listKeyFinder = { listName -> if (listName == "" || listName == null) null else listRepository.single(listName).key })
-            ), listRepository.singleOrNull { it.name == todo.list }
+            todoRepository.add(model),
+            listRepository.singleOrNull { it.name == todo.list }
         )
     }
 
@@ -26,6 +28,17 @@ class TodosController(
         .all().map { todo ->
             TodoApiModel(todo, listRepository.singleOrNull(todo.listId ?: -1))
         }.filter { if (list == null) true else it.list == list }
+
+    @PatchMapping
+    fun update(@RequestBody todo: TodoApiModel): TodoApiModel {
+        val model = todo.makeModel(listKeyFinder = {
+            listName -> if (listName == "" || listName == null) null else listRepository.single(listName).key
+        })
+        return TodoApiModel(
+            todoRepository.update(model),
+            listRepository.singleOrNull {it.name == todo.list}
+        )
+    }
 
     @DeleteMapping
     @RequestMapping("/{key}")
