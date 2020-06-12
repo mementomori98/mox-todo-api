@@ -13,7 +13,7 @@ abstract class InMemoryRepository<TKey: Any, TEntity: Entity<TKey>>(val keyProvi
         validate(model)
         key = keyProvider(key)
         model.key = key
-
+        println("This is fucking position: $position")
         entities.add(
             if (position >= entities.size) 0 else position,
             model
