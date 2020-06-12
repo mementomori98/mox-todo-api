@@ -15,5 +15,5 @@ data class TodoApiModel(
     constructor(todo: Todo, list: TodoList?)
         : this(todo.title, todo.notes, todo.priority, list?.name, list?.color ?: 0, todo.key)
 
-    fun makeModel(listKeyFinder: (String?) -> Int?) = Todo(title, notes, priority, listKeyFinder(list))
+    fun makeModel(listKeyFinder: (String?) -> Int?) = Todo(title, notes, priority, listKeyFinder(list), key)
 }
