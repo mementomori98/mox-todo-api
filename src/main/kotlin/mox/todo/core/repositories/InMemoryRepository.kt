@@ -9,11 +9,15 @@ abstract class InMemoryRepository<TKey: Any, TEntity: Entity<TKey>>(val keyProvi
     private val entities: MutableList<TEntity> = ArrayList()
     private var key: TKey = keyProvider(null)
 
-    override fun add(model: TEntity): TEntity {
+    override fun add(model: TEntity, position: Int): TEntity {
         validate(model)
         key = keyProvider(key)
         model.key = key
-        entities.add(model)
+
+        entities.add(
+            if (position >= entities.size) 0 else position,
+            model
+        )
         return model
     }
 

@@ -9,7 +9,8 @@ data class TodoApiModel(
     val priority: Int = 1,
     val list: String? = null,
     val color: Int = 0,
-    val key: Int = 0
+    val key: Int = 0,
+    val position: Int = 0
 ) {
 
     constructor(todo: Todo, list: TodoList?)

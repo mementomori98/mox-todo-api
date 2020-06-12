@@ -2,7 +2,7 @@ package mox.todo.core.repositories
 
 interface Repository<TKey, TEntity> {
 
-    fun add(model: TEntity): TEntity
+    fun add(model: TEntity, position: Int = 0): TEntity
     fun single(key: TKey): TEntity
     fun singleOrNull(key: TKey): TEntity?
     fun single(filter: (TEntity) -> Boolean): TEntity

@@ -18,7 +18,7 @@ class TodosController(
             listName -> if (listName == "" || listName == null) null else listRepository.single(listName).key
         })
         return TodoApiModel(
-            todoRepository.add(model),
+            todoRepository.add(model, todo.position),
             listRepository.singleOrNull { it.name == todo.list }
         )
     }
