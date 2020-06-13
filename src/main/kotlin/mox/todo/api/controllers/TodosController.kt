@@ -10,13 +10,11 @@ import org.springframework.web.bind.annotation.*
 class TodosController(
     val todoRepository: TodoRepository,
     val listRepository: TodoListRepository
-) {
+): ControllerBase() {
 
     @PostMapping
     fun add(@RequestBody todo: TodoApiModel): TodoApiModel {
-        val model = todo.makeModel(listKeyFinder = {
-            listName -> if (listName == "" || listName == null) null else listRepository.single(listName).key
-        })
+        val model = todo.makeModel { listRepository.single(it!!).key }
         return TodoApiModel(
             todoRepository.add(model, todo.position),
             listRepository.singleOrNull { it.name == todo.list }
@@ -25,7 +23,7 @@ class TodosController(
 
     @GetMapping
     fun getAll(@RequestParam(name = "listName") list: String?): List<TodoApiModel> = todoRepository
-        .all().map { todo ->
+        .all { it.listId in listRepository.all { it.userId == userId() }.map { list -> list.key }}.map { todo ->
             TodoApiModel(todo, listRepository.singleOrNull(todo.listId ?: -1))
         }.filter { if (list == null) true else it.list == list }
 

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 class TodoListsController(
     val listRepository: TodoListRepository,
     val todoRepository: TodoRepository
-) {
+): ControllerBase() {
 
     @PostMapping
     fun create(@RequestBody list: TodoListApiModel) = TodoListApiModel(
@@ -18,13 +18,14 @@ class TodoListsController(
     )
 
     @GetMapping
-    fun getAll(): List<TodoListApiModel> = listRepository.all().map {
+    fun getAll(): List<TodoListApiModel> = listRepository.all { it.userId == userId() }.map {
         TodoListApiModel(it)
     }
 
     @DeleteMapping
     @RequestMapping("/{key}")
     fun delete(@PathVariable(name = "key") key: Int) {
+        if (listRepository.single(key).userId != userId()) return
         todoRepository.deleteAll { it.listId == key }
         listRepository.delete(key)
     }
