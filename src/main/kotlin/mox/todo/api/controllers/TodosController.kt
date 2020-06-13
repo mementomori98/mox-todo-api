@@ -17,7 +17,7 @@ class TodosController(
         val model = todo.makeModel { listRepository.single(it!!).key }
         return TodoApiModel(
             todoRepository.add(model, todo.position),
-            listRepository.singleOrNull { it.name == todo.list }
+            listRepository.singleOrNull { it.name == todo.list && it.userId == userId() }
         )
     }
 
@@ -30,11 +30,11 @@ class TodosController(
     @PatchMapping
     fun update(@RequestBody todo: TodoApiModel): TodoApiModel {
         val model = todo.makeModel(listKeyFinder = {
-            listName -> if (listName == "" || listName == null) null else listRepository.single(listName).key
+            listName -> listRepository.single(listName!!).key
         })
         return TodoApiModel(
             todoRepository.update(model),
-            listRepository.singleOrNull {it.name == todo.list}
+            listRepository.singleOrNull {it.name == todo.list && it.userId == userId()}
         )
     }
 
