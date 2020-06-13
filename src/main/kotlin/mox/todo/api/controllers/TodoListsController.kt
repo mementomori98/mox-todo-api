@@ -24,6 +24,9 @@ class TodoListsController(
 
     @DeleteMapping
     @RequestMapping("/{key}")
-    fun delete(@PathVariable(name = "key") key: Int) = listRepository.delete(key)
+    fun delete(@PathVariable(name = "key") key: Int) {
+        todoRepository.deleteAll { it.listId == key }
+        listRepository.delete(key)
+    }
 
 }
