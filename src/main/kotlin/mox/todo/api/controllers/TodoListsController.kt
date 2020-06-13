@@ -1,6 +1,7 @@
 package mox.todo.api.controllers
 
 import mox.todo.api.models.TodoListApiModel
+import mox.todo.core.models.TodoList
 import mox.todo.core.repositories.TodoListRepository
 import mox.todo.core.repositories.TodoRepository
 import org.springframework.web.bind.annotation.*
@@ -14,7 +15,7 @@ class TodoListsController(
 
     @PostMapping
     fun create(@RequestBody list: TodoListApiModel) = TodoListApiModel(
-        listRepository.add(list.makeModel("J1bk9TejCNYv3xXh9zqWB488b1r1"))
+        userId()?.let { listRepository.add(list.makeModel(it)) } ?: TodoList("", 0, "")
     )
 
     @GetMapping
