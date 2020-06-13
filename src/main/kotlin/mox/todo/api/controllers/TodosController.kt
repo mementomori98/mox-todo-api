@@ -14,7 +14,7 @@ class TodosController(
 
     @PostMapping
     fun add(@RequestBody todo: TodoApiModel): TodoApiModel {
-        val model = todo.makeModel { listRepository.single(it!!).key }
+        val model = todo.makeModel { name -> listRepository.single{it.name == name && it.userId == userId()}.key }
         return TodoApiModel(
             todoRepository.add(model, todo.position),
             listRepository.singleOrNull { it.name == todo.list && it.userId == userId() }
