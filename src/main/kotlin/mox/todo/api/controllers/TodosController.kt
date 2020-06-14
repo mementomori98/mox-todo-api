@@ -29,9 +29,8 @@ class TodosController(
 
     @PatchMapping
     fun update(@RequestBody todo: TodoApiModel): TodoApiModel {
-        val model = todo.makeModel(listKeyFinder = {
-            listName -> listRepository.single(listName!!).key
-        })
+        val model = todo.makeModel { listName -> listRepository.single { it.name == listName && it.userId == userId() }.key
+        }
         return TodoApiModel(
             todoRepository.update(model),
             listRepository.singleOrNull {it.name == todo.list && it.userId == userId()}
